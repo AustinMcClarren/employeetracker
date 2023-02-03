@@ -1,6 +1,4 @@
 
-
-
 -- creating the department TABLE
 CREATE TABLE department (
   
@@ -8,7 +6,7 @@ CREATE TABLE department (
  
   id INT NOT NULL AUTO_INCREMENT,
   
-  name VARCHAR(30) NULL,
+  name VARCHAR(30) NULL
   
 );
 
@@ -25,7 +23,7 @@ CREATE TABLE role (
   
   salary DECIMAL(15.5) NULL,
   
-  department_id INT NULL,
+  department_id INT NULL
   
 );
 
@@ -45,6 +43,6 @@ CREATE TABLE employee (
   
   role_id INT NULL,
   
-  manager_id INT NULL,
+  manager_id INT NULL
   
 );
