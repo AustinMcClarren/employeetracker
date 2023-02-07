@@ -1,3 +1,7 @@
+
+
+
+
 -- DEPARTMENT
 INSERT INTO department (id,name)VALUES
 (001'Management'),
@@ -10,7 +14,7 @@ INSERT INTO department (id,name)VALUES
 
 
 -- ROLE
-INSERT INTO role (title, salary, department_id) VALUES 
+INSERT INTO role (id, title, salary, department_id) VALUES 
 (001,"CEO", 100000, 1),
 (002,"CFO", 70000, 2),
 (003,"Chief Engineer", 70000, 3),

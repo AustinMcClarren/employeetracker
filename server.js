@@ -3,20 +3,29 @@ const inquier = require("inquirer");
 const mysql = require('mysql2');
 
 
-// create the connection to database
-const connection = mysql.createConnection({
- 
-    //HOST, WHERE ITS BEING RAN
-  host: 'localhost',
-  
-  //USERNAME
-  user: 'austin',
-  
+const PORT = process.env.PORT || 3306;
+const app = express();
 
-//PASSWORD
-password: '' ,
-database: 'localdb'
-});
+
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+
+const db = mysql.createConnection(
+    {
+      host: 'localhost',
+      // MySQL username,
+      user: 'austin',
+      // MySQL password
+      password: '',
+      database: 'employee_db'
+    },
+    console.log(`Connected to the classlist_db database.`)
+  );
+
+
+
 
 connection.connect(function(err){
     if(err) throw err;
@@ -25,6 +34,9 @@ connection.connect(function(err){
     //start function
     start();
 });
+
+
+
 
 //prompt to run questions for application
 function start(){
@@ -52,3 +64,10 @@ function start(){
          }   
         ])
 }
+
+
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+  

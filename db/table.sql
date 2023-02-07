@@ -1,11 +1,11 @@
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS department;
+drop TABLE IF EXISTS employee;
 
 -- creating the department TABLE
 CREATE TABLE department (
-  
-  PRIMARY KEY (id),
- 
   -- Creates a numeric column called "id"
-  id INT NOT NULL ,
+  department_id INT PRIMARY KEY,
 
   -- MAKES A STRING COLUMN CALLED "NAME" WHICH CANNOT CONTAIN NULL
   name VARCHAR(30) NOT NULL
@@ -17,17 +17,16 @@ CREATE TABLE department (
 -- creating the role TABLE
 CREATE TABLE role (
 
-  PRIMARY KEY (id) ,
-  
-  id INT NOT NULL ,  
+  theRole_id INT PRIMARY KEY,
 
   -- The UNIQUE constraint ensures that all values in a column are different.
-  title VARCHAR(30)  NOT NULL UNIQUE,
+  title VARCHAR(30) NOT NULL UNIQUE,
   
   salary DECIMAL(15.5) NOT NULL,
-  
-  department_id INT
-  
+
+  department_id INT,
+
+  FOREGN KEY(department_id) REFERENCES department(department_id)
 );
 
 
@@ -35,17 +34,19 @@ CREATE TABLE role (
 
 -- creating the employee TABLE
 CREATE TABLE employee (
+
+  employee_id INT PRIMARY KEY,
   
-  PRIMARY KEY (id)
-  
-  id INT NOT NULL,
-  
-  first_name VARCHAR(30)  NOT NULL,
+  first_name VARCHAR(30) NOT NULL,
   
   last_name VARCHAR(30) NOT NULL,
   
   role_id INT NOT NULL,
   
-  manager_id INT NULL
-  
+  manager_id INT NULL ,
+
+ FOREIGN KEY (manager_id) REFERENCES employee(manager_id),
+
+ FOREIGN KEY (role_id) REFERENCES role(role_id)
+
 );
