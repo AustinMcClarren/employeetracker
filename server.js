@@ -10,12 +10,12 @@ const connection = mysql.createConnection({
   host: 'localhost',
   
   //USERNAME
-  user: 'root',
+  user: 'austin',
   
 
 //PASSWORD
-password: ' ' ,
-database: 'test'
+password: '' ,
+database: 'localdb'
 });
 
 connection.connect(function(err){
@@ -32,6 +32,21 @@ function start(){
         .prompt([
          {
         
+            type: "list",
+            name: "ToDo",
+            message: "What would you like to do?",
+            choices: [
+                "Add Employees",
+                "Delete Employees",
+                "Add Roles",
+                "Add Departments",
+                "View Employees",
+                "View Employees By Manager",
+                "View Roles",
+                "View Departments",
+                "Update Employee Roles",
+                "All Finished - Print Data",
+                "Exit"]
 
 
          }   
