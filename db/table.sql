@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS role;
+exiDROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS department;
-drop TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS employee;
 
 -- creating the department TABLE
 CREATE TABLE department (
@@ -45,8 +45,8 @@ CREATE TABLE employee (
   
   manager_id INT NULL ,
 
- FOREIGN KEY (manager_id) REFERENCES employee(manager_id),
+FOREIGN KEY (role_id) REFERENCES roles(id),
 
- FOREIGN KEY (role_id) REFERENCES role(role_id)
+FOREIGN KEY (manager_id) REFERENCES employee(id)
 
 );

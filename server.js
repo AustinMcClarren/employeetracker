@@ -5,7 +5,7 @@ const { printTable } = require("console-table-printer");
 var express = require('express')
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3306;
 const app = express();
 
 
@@ -14,26 +14,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-const db = mysql.createConnection( //not connected?
-    {
-      host: 'localhost',
-      // MySQL username,
-      user: 'austin',
-      // MySQL password
-      password: 'password',
-      database: 'employee_db'
-    },
-    console.log(`Connected to the classlist_db database.`)
-  );
 
 
+//SQL CONNECTION
+const connection = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "austin",
+  password: "",
+  database: "employee_db"
+});
 
 
-  mysql.createConnection(err => { //shooting error here, connection not correct?
-    if (err) throw err;
-    console.log('connected as id ' + connection.threadId);
-    afterConnection();
-  });
+connection.connect(function(err) {
+  if (err) throw err
+  console.log("CONNECTED TO DATABASE")
+  start();
+});
   
 
 
@@ -89,13 +86,16 @@ function start(){
         return;
 
       case "Update Employee Roles":
+        updateEmployee();
         return;
     }
   });
   
 }
 
-//VIEWING 
+
+
+//VIEW DEPARTMENT
 function Vdept(){
   db.query("select * from department", function (err,res){
     if(err)throw err;
@@ -104,6 +104,7 @@ function Vdept(){
   });
 }
 
+//VIEW ROLE
 function Vrole(){
   db.query("select * from employee", function (err,res){
     if(err)throw err;
@@ -112,6 +113,7 @@ function Vrole(){
   });
 }
 
+//VIEW EMPLOYEE
 function Vemployee(){
   db.query("select * from Role", function (err,res){
     if(err)throw err;
@@ -123,7 +125,7 @@ function Vemployee(){
 
 
 
-//ADDING
+// adding a employee
 function Aemployee(){
   inquier
   .prompt([
@@ -163,10 +165,7 @@ function Aemployee(){
 
 
 
-
-
-
-
+//adding a department
 function Adepartment(){
   inquier
   .prompt([
@@ -188,8 +187,7 @@ function Adepartment(){
 
 
 
-
-
+//adding a role
 function Arole(){
   inquier
   .prompt([
@@ -213,6 +211,7 @@ function Arole(){
   ])
 
   .then((answers)=>{
+    console.info('Answers:', answers);
     db.query("INSERT INTO role (id, title, salary, department_id)", function (err,res){
       if(err)throw err;
       printTable(res);
@@ -224,8 +223,37 @@ function Arole(){
 
 
 
+//updating an employee
+function updateEmployee() {
+  return inquirer
+  .prompt([{
+      type: 'list',
+      name: 'employee',
+      message: 'Which employee would you like to update?',
+  },{
+      type: 'list',
+      name: 'newRole',
+      message: 'What is the employees new role?',
+  }])
+  .then((answer) => {
+    if(err, res){
+}   Arole(answer);
+      printTable(res);
+      Aemployee();
+  })    
+};
 
+
+
+
+//where its listening from
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
   
+
+
+
+
+
+// THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
