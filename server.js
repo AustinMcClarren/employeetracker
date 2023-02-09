@@ -2,10 +2,10 @@
 const inquier = require("inquirer");
 const mysql = require('mysql2');
 const { printTable } = require("console-table-printer");
-var express = require('express')
+const express = require('express')
 
 
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3002;
 const app = express();
 
 
@@ -17,7 +17,7 @@ app.use(express.json());
 
 
 //SQL CONNECTION
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "austin",
@@ -26,7 +26,7 @@ const connection = mysql.createConnection({
 });
 
 
-connection.connect(function(err) {
+db.connect(function(err) {
   if (err) throw err
   console.log("CONNECTED TO DATABASE")
   start();
@@ -115,7 +115,7 @@ function Vrole(){
 
 //VIEW EMPLOYEE
 function Vemployee(){
-  db.query("select * from Role", function (err,res){
+  db.query("select * from role", function (err,res){
     if(err)throw err;
     printTable(res);
     start();
