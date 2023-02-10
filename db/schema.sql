@@ -1,13 +1,13 @@
 
 -- DROPS THE EMPLOYEE DATABASE
-DROP DATABASE IF EXISTS employee_db;
+DROP DATABASE IF EXISTS Employee_db;
 
 -- CREATES THE EMPLOYEE DATABASE 
 
-CREATE DATABASE employee_db;
+CREATE DATABASE Employee_db;
 
 -- USES THE EMPLOYEE DATABASE 
-USE employee_db;
+USE Employee_db;
 
 
 
@@ -17,7 +17,7 @@ CREATE TABLE department(
   -- Creates a numeric column called "id"
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
-  name VARCHAR(30) NOT NULL
+  dep_name VARCHAR(30) NOT NULL
   
 );
 
@@ -28,14 +28,14 @@ CREATE TABLE role (
 
   id INT PRIMARY KEY AUTO_INCREMENT,
 
-  -- The UNIQUE constraint ensures that all values in a column are different.
   title VARCHAR(30) NOT NULL UNIQUE,
   
   salary DECIMAL(15.5) NOT NULL,
 
-  department_id INT,
+  Department_id INT,
 
-Foreign Key (department_id) REFERENCES department(id)
+Foreign Key (Department_id) REFERENCES department(id)
+
 ON DELETE SET NULL
 );
 
@@ -56,5 +56,4 @@ CREATE TABLE employee (
   manager_id INT,
 
 Foreign Key (role_id) REFERENCES role(id)
-
 );

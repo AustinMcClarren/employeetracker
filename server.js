@@ -1,8 +1,8 @@
 // Dependencies
 const inquier = require("inquirer");
 const mysql = require('mysql2');
-const { printTable } = require("console-table-printer");
-const express = require('express')
+const cTable = require('console.table');
+const express = require('express');
 
 
 const PORT = process.env.PORT || 3002;
@@ -28,7 +28,7 @@ const db = mysql.createConnection({
 
 db.connect(function(err) {
   if (err) throw err
-  console.log("CONNECTED TO DATABASE")
+  console.log(`${db.threadId}`) // shows you the thread id, mysql is running on a thread. each time you end it it goes up
   start();
 });
   
@@ -66,7 +66,6 @@ function start(){
     
       case "Add Roles":
         Arole();
-
          return;
   
       case"Add Departments":
@@ -88,6 +87,9 @@ function start(){
       case "Update Employee Roles":
         updateEmployee();
         return;
+
+        case 'Exit':
+        Exit();
     }
   });
   
@@ -97,27 +99,27 @@ function start(){
 
 //VIEW DEPARTMENT
 function Vdept(){
-  db.query("select * from department", function (err,res){
+  db.query("SELECT * FROM department", function (err,res){
     if(err)throw err;
-    printTable(res);
+    console.table(res);
     start();
   });
 }
 
 //VIEW ROLE
 function Vrole(){
-  db.query("select * from employee", function (err,res){
+  db.query("SELECT * FROM employee", function (err,res){
     if(err)throw err;
-    printTable(res);
+    console.table(res);
     start();
   });
 }
 
 //VIEW EMPLOYEE
 function Vemployee(){
-  db.query("select * from role", function (err,res){
+  db.query("SELECT * FROM role", function (err,res){
     if(err)throw err;
-    printTable(res);
+    console.table(res);
     start();
   });
 }
@@ -143,7 +145,7 @@ function Aemployee(){
 
     {
       type: 'input',
-      message: 'What is your role is?',
+      message: 'What is your role?',
       name: 'role_id',
     },
 
@@ -155,9 +157,10 @@ function Aemployee(){
   ])
   .then((answers)=>{
     console.info('Answers:', answers);
-    db.query("INSERT INTO employee ( id, first_name, last_name, role_id, manager_id)", function (err,res){
+    db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) values (?,?,?,?)", [answers.first_name, answers.last_name, answers.role_id, answers.manager_id], function (err,res){
+
       if(err)throw err;
-      printTable(res);
+      console.table(res);
       start();
     });
   })
@@ -172,14 +175,15 @@ function Adepartment(){
     {
       type: 'input',
       message: 'What department are you in?',
-      name: 'department_name',
+      name: 'department',
     },
   ])
   .then((answers)=>{
     console.info('Answers:', answers);
-    db.query("INSERT INTO department (id,name)", function (err,res){
+    // for every colum need another ?
+    db.query("INSERT INTO department (name) values (?)",[answers.department], function (err,res){
       if(err)throw err;
-      printTable(res);
+      Vdept(); //this will show the table
       start();
     });
   });
@@ -212,9 +216,9 @@ function Arole(){
 
   .then((answers)=>{
     console.info('Answers:', answers);
-    db.query("INSERT INTO role (id, title, salary, department_id)", function (err,res){
+    db.query("INSERT INTO role (title, salary, department_id) values (?,?,?)", [answers.title, answers.salary, answers.department_id ], function (err,res){
       if(err)throw err;
-      printTable(res);
+     Vrole();
       start();
     });
   })
@@ -238,19 +242,24 @@ function updateEmployee() {
   .then((answer) => {
     if(err, res){
 }   Arole(answer);
-      printTable(res);
+      Vemployee();
       Aemployee();
   })    
 };
 
-
-
+function Exit(){
+  return process.exit();
+}
 
 //where its listening from
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
   
+
+
+
+
 
 
 
